@@ -54,21 +54,6 @@ services:
       - "8080:8080"
   presto-worker:
     image: prestodb
-    volumes:
-      - ./prestodb/worker/etc:/home/presto/etc
-  crawler:
-    image: python
-    volumes:
-      - ./crawler/src:/opt/crawler
-      - ./data:/data
-    tty: true
-  application:
-    image: python
-    volumes:
-      - ./application/src:/opt/application
-    tty: true
-    ports:
-      - "80:80"
 volumes:
   namenode:
   datanode:

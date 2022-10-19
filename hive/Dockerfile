@@ -33,22 +33,27 @@ RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.
 RUN wget http://www.congiu.net/hive-json-serde/1.3.8/hdp23/json-serde-1.3.8-jar-with-dependencies.jar && \
 	cp json-serde-1.3.8-jar-with-dependencies.jar $HIVE_HOME/lib/
 
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && ./aws/install
+
 #Spark should be compiled with Hive to be able to use it
 #hive-site.xml should be copied to $SPARK_HOME/conf folder
 
 #Custom configuration goes here
-ADD conf/hive-site.xml $HIVE_HOME/conf
-ADD conf/beeline-log4j2.properties $HIVE_HOME/conf
-ADD conf/hive-env.sh $HIVE_HOME/conf
-ADD conf/hive-exec-log4j2.properties $HIVE_HOME/conf
-ADD conf/hive-log4j2.properties $HIVE_HOME/conf
-ADD conf/ivysettings.xml $HIVE_HOME/conf
-ADD conf/llap-daemon-log4j2.properties $HIVE_HOME/conf
+ADD hive/conf/hive-site.xml $HIVE_HOME/conf
+ADD hive/conf/beeline-log4j2.properties $HIVE_HOME/conf
+ADD hive/conf/hive-env.sh $HIVE_HOME/conf
+ADD hive/conf/hive-exec-log4j2.properties $HIVE_HOME/conf
+ADD hive/conf/hive-log4j2.properties $HIVE_HOME/conf
+ADD hive/conf/ivysettings.xml $HIVE_HOME/conf
+ADD hive/conf/llap-daemon-log4j2.properties $HIVE_HOME/conf
 
-COPY startup.sh /usr/local/bin/
+COPY lib/ /opt/hadoop-3.1.1/share/hadoop/common/lib/
+
+COPY hive/startup.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/startup.sh
 
-COPY entrypoint.sh /usr/local/bin/
+COPY hive/entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 10000

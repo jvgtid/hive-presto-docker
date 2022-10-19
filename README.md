@@ -8,25 +8,16 @@ Because our purpose is just to experiment, to accelerate the set up we could use
 First of all we need to clone this repo:
 ```
 $ git clone git@github.com:dinhnhatbang/hive-presto-docker.git
-$ cd hive-presto-tutorial
-$ make
+$ cd hive-presto-docker
 ```
-The first step is to build the docker images and start the cluster based on those images.
-To do that we'll execute the following command **from the root of this project**(*):
+Then, add a `.env` file inside the project root with your AWS credentials as follows:
 ```
-$ docker-compose up -d
+AWS_ACCESS_KEY_ID=xxxxxx
+AWS_SECRET_ACCESS_KEY=xxxxxx
 ```
-After that we will create initial tables of hive metastore:
+Then, execute "launchAll.sh" script from project root path
 ```
-$ docker-compose exec hive-server bash
-```
-Run script for create initial tables of MySQL:
-```
-# /opt/hive/bin/schematool -dbType mysql -initSchema
-```
-Exit and restart again of **hive-metastore**
-```
-$ docker-compose up -d hive-metastore
+$ ./launchAll.sh
 ```
 Checking again of **docker-compose** to make sure all services are running:
 ```
