@@ -5,9 +5,12 @@ LABEL MAINTAINER=shawnzhu@users.noreply.github.com
 ENV PRESTO_VERSION=0.261
 ENV PRESTO_HOME=/home/presto
 
+# Add source due debian stretch move to archive.debian.org/
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 # extra dependency for running launcher
-RUN apt-get update 
-RUn apt-get install -y --no-install-recommends \
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
 		python2.7-minimal vim && \
     ln -s /usr/bin/python2.7 /usr/bin/python
 
