@@ -35,6 +35,8 @@ COPY prestodb/ss-presto-plugins ${PRESTO_HOME}/plugin/ss-presto-plugins
 
 COPY .env ${PRESTO_HOME}/.env
 
+USER root
+RUN chmod 777 ${PRESTO_HOME}/etc/catalog/hive.properties
 RUN . ${PRESTO_HOME}/.env && echo "hive.s3.aws-access-key=${AWS_ACCESS_KEY_ID}" >> ${PRESTO_HOME}/etc/catalog/hive.properties
 RUN . ${PRESTO_HOME}/.env && echo "hive.s3.aws-secret-key=${AWS_SECRET_ACCESS_KEY}" >> ${PRESTO_HOME}/etc/catalog/hive.properties
 
