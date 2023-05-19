@@ -1,4 +1,7 @@
-FROM debian:9
+FROM debian:11
+
+# For openjdk-8-jdk installation
+RUN echo "deb http://deb.debian.org/debian/ sid main" >> /etc/apt/sources.list
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       openjdk-8-jdk \
