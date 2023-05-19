@@ -1,10 +1,10 @@
 # Docker of Hive, Presto and Hadoop HDFS
 
-The idea of this repo is to provide some simple step by step guide to set up an isolated test/dev version Hive & PrestoDB locally and start playing around with it :-).
+The idea of this repo is to provide some simple step-by-step guide to set up an isolated test/dev version Hive & PrestoDB locally and start playing around with it :-).
 This set up is totally NOT recommended for production workloads.
 
 ## Set up Hive & PrestoDB locally (isolated)
-Because our purpose is just to experiment, to accelerate the set up we could use docker images (to be accurate, docker-compose).
+Because our purpose is just to experiment, to accelerate the set-up we could use docker images (to be accurate, docker-compose).
 First of all we need to clone this repo:
 ```
 $ git clone git@github.com:dinhnhatbang/hive-presto-docker.git
@@ -32,6 +32,33 @@ e9843e403a81        hadoop/namenode     "/entrypoint.sh /run…"   22 minutes ag
 ```
 (*) We are assuming that you have docker installed and configured, if not take a look to this [guide](https://docs.docker.com/install/overview/)
 
+### Solve problems in windows
+Connect to mysql node
+```
+docker-compose exec mysql bash
+```
+Update credentials for root user:
+```
+mysql
+
+CREATE USER 'root'@'%' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+CREATE DATABASE hive;
+```
+Connect to hive-server:
+```
+docker-compose exec hive-server bash
+```
+Create hive default schema:
+```
+/opt/hive/bin/schematool -dbType mysql -initSchema
+```
+You could test your credentials for AWS are correctly set with:
+```
+more /opt/hadoop-3.1.1/etc/hadoop/core-site.xml
+```
+
 ## Getting some data to analyze
 In our example we'll be analyzing the following file [temp-data.csv](temp-data.csv), here you can see a sample:
 ```
@@ -58,7 +85,7 @@ Connect the JDBC driver:
 ```
 # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
 ```
-Finally create the table from the data in the file:
+Finally, create the table from the data in the file:
 ```
 > CREATE EXTERNAL TABLE horlytemp(time STRING, temp INT) COMMENT 'temperature from csv file' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE location '/data';
 ```
@@ -77,7 +104,7 @@ Now lets execute a presto client:
 cd presto_client
 ./presto.jar --server localhost:8080 --catalog hive --schema default
 ```
-Finally from that shell we can query that table, for instance:
+Finally, from that shell we can query that table, for instance:
 ```
 # select * from horlytemp where temp > 80;
 ```
